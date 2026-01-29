@@ -302,8 +302,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         title: '🎊 CONFIRMADO! 🎊',
                         html: `
-                            <div style="font-size: 3rem; margin: 20px 0;">
-                                🎭🎉💃🕺🎺
+                            <div style="margin: 15px 0;">
+                                <img src="img/edinaldo.jpeg" alt="Edinaldo" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #2ed573; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
                             </div>
                             <p style="font-size: 1.2rem; color: #2ed573;">
                                 <strong>${nome}</strong>, sua presença está confirmada!
