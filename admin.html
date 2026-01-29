@@ -197,6 +197,66 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .btn-whatsapp {
+            background: #25D366;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+
+        .btn-location {
+            background: linear-gradient(135deg, #4285F4, #34A853);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-location:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(66, 133, 244, 0.4);
+        }
+
+        .location-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .location-card h3 {
+            color: #ffd93d;
+            margin-bottom: 10px;
+        }
+
+        .location-card p {
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
         .whatsapp-link {
             color: #2ed573;
             text-decoration: none;
@@ -236,6 +296,14 @@
             <p>Gerencie as confirmações de presença</p>
         </div>
 
+        <div class="location-card">
+            <h3>📍 Localização do Evento</h3>
+            <p>Sítio do Edinaldo - Clique para abrir no Maps</p>
+            <a href="https://www.google.com/maps?q=3.024111,-60.772278" target="_blank" class="btn-location">
+                🗺️ Abrir no Google Maps
+            </a>
+        </div>
+
         <div class="stats">
             <div class="stat-card total">
                 <div class="number" id="total-confirmacoes">-</div>
@@ -272,6 +340,7 @@
                         <th>Acompanhante</th>
                         <th>Qtd. Pessoas</th>
                         <th>Data/Hora</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody id="tbody-confirmacoes">
@@ -300,6 +369,30 @@
         function formatarWhatsApp(numero) {
             const numeroLimpo = numero.replace(/\D/g, '');
             return `<a href="https://wa.me/55${numeroLimpo}" target="_blank" class="whatsapp-link">📱 ${numero}</a>`;
+        }
+
+        // Mensagem para enviar no WhatsApp
+        function getMensagemWhatsApp() {
+            const mensagem = `🎭✨ Oi, que alegria ter você no Bloquinho do Edinaldo 2026!
+Sua presença já está confirmada e a festa promete muita música, cores e diversão 🎶🎉
+
+🎁 Lista de presentes (opcional):
+• Blusa tamanho M nas cores: branco, amarelo, verde, rosa baby, verde claro ou bege claro.
+• Sapato tamanho 40
+(Cores preto/branco que ele ama 💛💚)
+
+📍 Localização do evento:
+https://www.google.com/maps?q=3.024111,-60.772278
+
+Agora é só separar a fantasia e cair na folia com a gente! 🥳🎊`;
+            return encodeURIComponent(mensagem);
+        }
+
+        // Criar botão de enviar mensagem
+        function criarBotaoEnviarMensagem(numero) {
+            const numeroLimpo = numero.replace(/\D/g, '');
+            const mensagem = getMensagemWhatsApp();
+            return `<a href="https://wa.me/55${numeroLimpo}?text=${mensagem}" target="_blank" class="btn-whatsapp">📩 Enviar Msg</a>`;
         }
 
         // Carregar confirmações
@@ -349,6 +442,7 @@
                         <td><span class="badge ${item.acompanhante ? 'badge-sim' : 'badge-nao'}">${item.acompanhante ? 'Sim' : 'Não'}</span></td>
                         <td>${item.quantidade || 1}</td>
                         <td class="data-hora">${formatarData(item.created_at)}</td>
+                        <td>${criarBotaoEnviarMensagem(item.whatsapp)}</td>
                     </tr>
                 `).join('');
 
