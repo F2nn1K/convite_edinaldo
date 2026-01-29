@@ -5,22 +5,25 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Função para salvar confirmação no Supabase
 async function salvarConfirmacao(nome, whatsapp, acompanhante, quantidade) {
+    console.log('Tentando salvar:', { nome, whatsapp, acompanhante, quantidade });
+    
     const { data, error } = await supabase
         .from('confirmacoes')
-        .insert([
-            {
-                nome: nome,
-                whatsapp: whatsapp,
-                acompanhante: acompanhante === 'sim',
-                quantidade: parseInt(quantidade)
-            }
-        ]);
+        .insert({
+            nome: nome,
+            whatsapp: whatsapp,
+            acompanhante: acompanhante === 'sim',
+            quantidade: parseInt(quantidade)
+        })
+        .select();
     
     if (error) {
-        console.error('Erro ao salvar:', error);
+        console.error('Erro ao salvar no Supabase:', error);
+        console.error('Detalhes:', error.message, error.details, error.hint);
         throw error;
     }
     
+    console.log('Salvo com sucesso:', data);
     return data;
 }
 
