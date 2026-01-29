@@ -1,13 +1,13 @@
 // Configuração do Supabase
 const SUPABASE_URL = 'https://dkherzclnqqlzumfsjnf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRraGVyemNsbnFxbHp1bWZzam5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NDA2MDgsImV4cCI6MjA4NTIxNjYwOH0.-9-kJCrv13k2fyrKiQhX6NTDPBpRHW8eirdtvRZ9XuE';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Função para salvar confirmação no Supabase
 async function salvarConfirmacao(nome, whatsapp, acompanhante, quantidade) {
     console.log('Tentando salvar:', { nome, whatsapp, acompanhante, quantidade });
     
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('confirmacoes')
         .insert({
             nome: nome,
