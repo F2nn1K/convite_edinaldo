@@ -92,40 +92,30 @@ function setupBackgroundMusic() {
     const toggleBtn = document.getElementById('music-toggle');
     
     audio.volume = 0.5;
+    toggleBtn.textContent = '🔇';
+    toggleBtn.classList.add('muted');
     
-    // Função para iniciar a música
-    const playMusic = () => {
-        audio.play().then(() => {
-            toggleBtn.textContent = '🔊';
-            toggleBtn.classList.remove('muted');
-        }).catch(() => {
-            // Se falhar, mostra popup para o usuário clicar
-            showMusicPopup();
-        });
-    };
-    
-    // Popup para iniciar a música (contorna bloqueio de autoplay)
-    const showMusicPopup = () => {
-        Swal.fire({
-            title: '🎭 Bloquinho do Edinaldo! 🎉',
-            html: '<p style="font-size: 1.2rem;">Clique para entrar na folia com música!</p><div style="font-size: 3rem; margin: 15px 0;">🎺🥁🎵🎶🎤</div>',
-            confirmButtonText: '🎉 Bora lá!',
-            confirmButtonColor: '#2ed573',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showClass: {
-                popup: 'animate__animated animate__bounceIn'
-            }
-        }).then(() => {
-            audio.play();
-            toggleBtn.textContent = '🔊';
-            toggleBtn.classList.remove('muted');
-            confettiExplosion();
-        });
-    };
-    
-    // Tenta tocar ao carregar
-    playMusic();
+    // Mostra popup para iniciar a música (navegadores bloqueiam autoplay)
+    Swal.fire({
+        title: '🎭 Bloquinho do Edinaldo! 🎉',
+        html: '<p style="font-size: 1.2rem;">Clique para entrar na folia com música!</p><div style="font-size: 3rem; margin: 15px 0;">🎺🥁🎵🎶🎤</div>',
+        confirmButtonText: '🎉 Bora lá!',
+        confirmButtonColor: '#2ed573',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        backdrop: true,
+        showClass: {
+            popup: 'animate__animated animate__bounceIn'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            audio.play().then(() => {
+                toggleBtn.textContent = '🔊';
+                toggleBtn.classList.remove('muted');
+                confettiExplosion();
+            });
+        }
+    });
     
     // Botão de toggle
     toggleBtn.addEventListener('click', (e) => {
@@ -298,13 +288,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Alerta de boas-vindas
-    setTimeout(() => {
-        Toast.fire({
-            icon: 'info',
-            title: '🎭 Bem-vindo ao Bloquinho do Edinaldo!'
-        });
-    }, 1000);
 });
 
 // Easter egg: shake para confetes
