@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Bloquinho do Edinaldo 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Confetes animados -->
+    <div class="confetti-container" id="confetti-container"></div>
+    
+    <!-- Serpentinas -->
+    <div class="serpentina serpentina-1"></div>
+    <div class="serpentina serpentina-2"></div>
+    <div class="serpentina serpentina-3"></div>
+    <div class="serpentina serpentina-4"></div>
+
+    <!-- Container principal -->
+    <div class="main-container animate__animated animate__bounceIn">
+        <!-- Máscaras de carnaval decorativas -->
+        <div class="mask mask-left">🎭</div>
+        <div class="mask mask-right">🎭</div>
+
+        <!-- Cabeçalho -->
+        <header class="header">
+            <div class="emoji-dance">🥳</div>
+            <h1 class="title animate__animated animate__pulse animate__infinite">
+                <span class="title-icon">🎉</span>
+                Bloquinho do Edinaldo
+                <span class="title-icon">🎉</span>
+            </h1>
+            <p class="subtitle">Você está convidado(a) para a maior folia!</p>
+            <div class="carnival-icons">
+                <span class="icon-bounce">🎺</span>
+                <span class="icon-bounce delay-1">🥁</span>
+                <span class="icon-bounce delay-2">🎊</span>
+                <span class="icon-bounce delay-3">💃</span>
+                <span class="icon-bounce delay-4">🕺</span>
+            </div>
+        </header>
+
+        <!-- Formulário -->
+        <form id="rsvp-form" class="rsvp-form">
+            <div class="form-group animate__animated animate__fadeInUp">
+                <label for="nome">
+                    <span class="label-icon">👤</span>
+                    Nome Completo
+                </label>
+                <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+            </div>
+
+            <div class="form-group animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                <label for="whatsapp">
+                    <span class="label-icon">📱</span>
+                    WhatsApp
+                </label>
+                <input type="tel" id="whatsapp" name="whatsapp" placeholder="(00) 00000-0000" required>
+            </div>
+
+            <div class="form-group animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <label>
+                    <span class="label-icon">👫</span>
+                    Vai levar acompanhante?
+                </label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="acompanhante" value="sim" id="acompanhante-sim">
+                        <span class="radio-custom"></span>
+                        Sim, vou! 🎉
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="acompanhante" value="nao" id="acompanhante-nao" checked>
+                        <span class="radio-custom"></span>
+                        Não, vou sozinho(a) 😎
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group animate__animated animate__fadeInUp quantidade-group" id="quantidade-group" style="display: none; animation-delay: 0.3s">
+                <label for="quantidade">
+                    <span class="label-icon">🔢</span>
+                    Quantas pessoas no total? (contando com você)
+                </label>
+                <input type="number" id="quantidade" name="quantidade" min="2" max="10" value="2" placeholder="Ex: 2">
+            </div>
+
+            <button type="submit" class="submit-btn animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <span class="btn-text">Confirmar Presença</span>
+                <span class="btn-icons">🎭🎉🎊</span>
+            </button>
+        </form>
+
+        <!-- Rodapé decorativo -->
+        <footer class="footer">
+            <div class="dancing-emoji">💃🕺💃🕺💃</div>
+            <p>Coloque sua Havaina e venha pular Carnaval 🎸🍖🎤</p>
+        </footer>
+    </div>
+
+    <!-- Música de fundo visual -->
+    <div class="music-notes">
+        <span class="note note-1">🎵</span>
+        <span class="note note-2">🎶</span>
+        <span class="note note-3">🎵</span>
+        <span class="note note-4">🎶</span>
+        <span class="note note-5">🎵</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
