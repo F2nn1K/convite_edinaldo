@@ -98,7 +98,7 @@ function setupBackgroundMusic() {
     // Mostra popup para iniciar a música (navegadores bloqueiam autoplay)
     Swal.fire({
         title: '🎭 Bloquinho do Edinaldo! 🎉',
-        html: '<p style="font-size: 1.2rem;">Clique para entrar na folia com música!</p><div style="font-size: 3rem; margin: 15px 0;">🎺🥁🎵🎶🎤</div>',
+        html: '<p style="font-size: 1.2rem;">Confirme sua presença até <strong style="color: #ff6b6b;">10 de Fevereiro de 2026</strong>!</p><div style="font-size: 3rem; margin: 15px 0;">🎺🥁🎵🎶🎤</div>',
         confirmButtonText: '🎉 Bora lá!',
         confirmButtonColor: '#2ed573',
         allowOutsideClick: false,
