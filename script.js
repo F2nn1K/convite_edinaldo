@@ -86,9 +86,58 @@ function maskPhone(input) {
     input.value = value;
 }
 
+// Controle de música de fundo
+function setupBackgroundMusic() {
+    const audio = document.getElementById('background-music');
+    const toggleBtn = document.getElementById('music-toggle');
+    
+    // Tenta tocar automaticamente
+    const playMusic = () => {
+        audio.volume = 0.5;
+        audio.play().then(() => {
+            toggleBtn.textContent = '🔊';
+            toggleBtn.classList.remove('muted');
+        }).catch(() => {
+            // Autoplay bloqueado, aguarda interação do usuário
+            toggleBtn.textContent = '🔇';
+            toggleBtn.classList.add('muted');
+        });
+    };
+    
+    // Tenta tocar ao carregar
+    playMusic();
+    
+    // Também tenta tocar na primeira interação do usuário
+    const startMusicOnInteraction = () => {
+        if (audio.paused) {
+            playMusic();
+        }
+        document.removeEventListener('click', startMusicOnInteraction);
+        document.removeEventListener('touchstart', startMusicOnInteraction);
+    };
+    
+    document.addEventListener('click', startMusicOnInteraction);
+    document.addEventListener('touchstart', startMusicOnInteraction);
+    
+    // Botão de toggle
+    toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (audio.paused) {
+            audio.play();
+            toggleBtn.textContent = '🔊';
+            toggleBtn.classList.remove('muted');
+        } else {
+            audio.pause();
+            toggleBtn.textContent = '🔇';
+            toggleBtn.classList.add('muted');
+        }
+    });
+}
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
     createConfetti();
+    setupBackgroundMusic();
     
     // Máscara do WhatsApp
     const whatsappInput = document.getElementById('whatsapp');

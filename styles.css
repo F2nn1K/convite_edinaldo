@@ -517,6 +517,39 @@ body {
     }
 }
 
+/* Botão de controle de música */
+.music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ffd93d, #54a0ff);
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    animation: pulse-music 2s ease-in-out infinite;
+}
+
+.music-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.music-toggle.muted {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    animation: none;
+}
+
+@keyframes pulse-music {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
 /* Animação de entrada dos confetes */
 @keyframes confetti-explosion {
     0% {
