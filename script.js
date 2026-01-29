@@ -177,17 +177,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const acompanhanteNao = document.getElementById('acompanhante-nao');
     const quantidadeGroup = document.getElementById('quantidade-group');
     
-    acompanhanteSim.addEventListener('change', function() {
-        if (this.checked) {
+    // Função para verificar e mostrar/ocultar campo de quantidade
+    function toggleQuantidadeField() {
+        if (acompanhanteSim.checked) {
             quantidadeGroup.style.display = 'block';
+            quantidadeGroup.classList.remove('animate__fadeInDown');
+            void quantidadeGroup.offsetWidth; // Força reflow
             quantidadeGroup.classList.add('animate__animated', 'animate__fadeInDown');
-        }
-    });
-    
-    acompanhanteNao.addEventListener('change', function() {
-        if (this.checked) {
+        } else {
             quantidadeGroup.style.display = 'none';
         }
+    }
+    
+    acompanhanteSim.addEventListener('change', toggleQuantidadeField);
+    acompanhanteNao.addEventListener('change', toggleQuantidadeField);
+    
+    // Também adiciona listener nos labels para garantir
+    document.querySelectorAll('input[name="acompanhante"]').forEach(radio => {
+        radio.addEventListener('click', toggleQuantidadeField);
     });
     
     // Submissão do formulário
