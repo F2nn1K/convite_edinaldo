@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Admin - Bloquinho do Edinaldo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 2.5rem;
+            color: #ffd93d;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card .number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2ed573;
+        }
+
+        .stat-card .label {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .stat-card.total .number {
+            color: #ffd93d;
+        }
+
+        .stat-card.pessoas .number {
+            color: #54a0ff;
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            overflow-x: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: #ffd93d;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-sim {
+            background: #2ed573;
+            color: #fff;
+        }
+
+        .badge-nao {
+            background: #576574;
+            color: #fff;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #aaa;
+        }
+
+        .loading-spinner {
+            font-size: 3rem;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #aaa;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, #2ed573, #54a0ff);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-refresh:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .whatsapp-link {
+            color: #2ed573;
+            text-decoration: none;
+        }
+
+        .whatsapp-link:hover {
+            text-decoration: underline;
+        }
+
+        .data-hora {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+
+            .stat-card .number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="btn-back">← Voltar ao Convite</a>
+        
+        <div class="header">
+            <h1>🎭 Painel Admin - Bloquinho do Edinaldo 🎉</h1>
+            <p>Gerencie as confirmações de presença</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card total">
+                <div class="number" id="total-confirmacoes">-</div>
+                <div class="label">Confirmações</div>
+            </div>
+            <div class="stat-card pessoas">
+                <div class="number" id="total-pessoas">-</div>
+                <div class="label">Total de Pessoas</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="com-acompanhante">-</div>
+                <div class="label">Com Acompanhante</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div id="loading" class="loading">
+                <div class="loading-spinner">🎭</div>
+                <p>Carregando confirmações...</p>
+            </div>
+            
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="icon">📭</div>
+                <p>Nenhuma confirmação ainda.</p>
+                <p>Compartilhe o convite!</p>
+            </div>
+
+            <table id="tabela-confirmacoes" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>WhatsApp</th>
+                        <th>Acompanhante</th>
+                        <th>Qtd. Pessoas</th>
+                        <th>Data/Hora</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-confirmacoes">
+                </tbody>
+            </table>
+
+            <div style="text-align: center;">
+                <button class="btn-refresh" onclick="carregarConfirmacoes()">🔄 Atualizar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração do Supabase
+        const SUPABASE_URL = 'https://dkherzclnqqlzumfsjnf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRraGVyemNsbnFxbHp1bWZzam5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NDA2MDgsImV4cCI6MjA4NTIxNjYwOH0.-9-kJCrv13k2fyrKiQhX6NTDPBpRHW8eirdtvRZ9XuE';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Formatar data
+        function formatarData(dataISO) {
+            const data = new Date(dataISO);
+            return data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Formatar WhatsApp para link
+        function formatarWhatsApp(numero) {
+            const numeroLimpo = numero.replace(/\D/g, '');
+            return `<a href="https://wa.me/55${numeroLimpo}" target="_blank" class="whatsapp-link">📱 ${numero}</a>`;
+        }
+
+        // Carregar confirmações
+        async function carregarConfirmacoes() {
+            const loading = document.getElementById('loading');
+            const emptyState = document.getElementById('empty-state');
+            const tabela = document.getElementById('tabela-confirmacoes');
+            const tbody = document.getElementById('tbody-confirmacoes');
+
+            loading.style.display = 'block';
+            emptyState.style.display = 'none';
+            tabela.style.display = 'none';
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('confirmacoes')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                loading.style.display = 'none';
+
+                if (!data || data.length === 0) {
+                    emptyState.style.display = 'block';
+                    document.getElementById('total-confirmacoes').textContent = '0';
+                    document.getElementById('total-pessoas').textContent = '0';
+                    document.getElementById('com-acompanhante').textContent = '0';
+                    return;
+                }
+
+                // Calcular estatísticas
+                const totalConfirmacoes = data.length;
+                const totalPessoas = data.reduce((sum, item) => sum + (item.quantidade || 1), 0);
+                const comAcompanhante = data.filter(item => item.acompanhante).length;
+
+                document.getElementById('total-confirmacoes').textContent = totalConfirmacoes;
+                document.getElementById('total-pessoas').textContent = totalPessoas;
+                document.getElementById('com-acompanhante').textContent = comAcompanhante;
+
+                // Preencher tabela
+                tbody.innerHTML = data.map((item, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${item.nome}</strong></td>
+                        <td>${formatarWhatsApp(item.whatsapp)}</td>
+                        <td><span class="badge ${item.acompanhante ? 'badge-sim' : 'badge-nao'}">${item.acompanhante ? 'Sim' : 'Não'}</span></td>
+                        <td>${item.quantidade || 1}</td>
+                        <td class="data-hora">${formatarData(item.created_at)}</td>
+                    </tr>
+                `).join('');
+
+                tabela.style.display = 'table';
+
+            } catch (error) {
+                console.error('Erro ao carregar:', error);
+                loading.style.display = 'none';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: 'Não foi possível carregar as confirmações.',
+                    confirmButtonColor: '#2ed573'
+                });
+            }
+        }
+
+        // Carregar ao iniciar
+        document.addEventListener('DOMContentLoaded', carregarConfirmacoes);
+    </script>
+</body>
+</html>
