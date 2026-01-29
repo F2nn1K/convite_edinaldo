@@ -91,33 +91,41 @@ function setupBackgroundMusic() {
     const audio = document.getElementById('background-music');
     const toggleBtn = document.getElementById('music-toggle');
     
-    // Tenta tocar automaticamente
+    audio.volume = 0.5;
+    
+    // Função para iniciar a música
     const playMusic = () => {
-        audio.volume = 0.5;
         audio.play().then(() => {
             toggleBtn.textContent = '🔊';
             toggleBtn.classList.remove('muted');
         }).catch(() => {
-            // Autoplay bloqueado, aguarda interação do usuário
-            toggleBtn.textContent = '🔇';
-            toggleBtn.classList.add('muted');
+            // Se falhar, mostra popup para o usuário clicar
+            showMusicPopup();
+        });
+    };
+    
+    // Popup para iniciar a música (contorna bloqueio de autoplay)
+    const showMusicPopup = () => {
+        Swal.fire({
+            title: '🎭 Bloquinho do Edinaldo! 🎉',
+            html: '<p style="font-size: 1.2rem;">Clique para entrar na folia com música!</p><div style="font-size: 3rem; margin: 15px 0;">🎺🥁🎵🎶🎤</div>',
+            confirmButtonText: '🎉 Bora lá!',
+            confirmButtonColor: '#2ed573',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showClass: {
+                popup: 'animate__animated animate__bounceIn'
+            }
+        }).then(() => {
+            audio.play();
+            toggleBtn.textContent = '🔊';
+            toggleBtn.classList.remove('muted');
+            confettiExplosion();
         });
     };
     
     // Tenta tocar ao carregar
     playMusic();
-    
-    // Também tenta tocar na primeira interação do usuário
-    const startMusicOnInteraction = () => {
-        if (audio.paused) {
-            playMusic();
-        }
-        document.removeEventListener('click', startMusicOnInteraction);
-        document.removeEventListener('touchstart', startMusicOnInteraction);
-    };
-    
-    document.addEventListener('click', startMusicOnInteraction);
-    document.addEventListener('touchstart', startMusicOnInteraction);
     
     // Botão de toggle
     toggleBtn.addEventListener('click', (e) => {
