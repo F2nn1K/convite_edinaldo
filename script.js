@@ -1,3 +1,29 @@
+// Configuração do Supabase
+const SUPABASE_URL = 'https://dkherzclnqqlzumfsjnf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRraGVyemNsbnFxbHp1bWZzam5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NDA2MDgsImV4cCI6MjA4NTIxNjYwOH0.-9-kJCrv13k2fyrKiQhX6NTDPBpRHW8eirdtvRZ9XuE';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Função para salvar confirmação no Supabase
+async function salvarConfirmacao(nome, whatsapp, acompanhante, quantidade) {
+    const { data, error } = await supabase
+        .from('confirmacoes')
+        .insert([
+            {
+                nome: nome,
+                whatsapp: whatsapp,
+                acompanhante: acompanhante === 'sim',
+                quantidade: parseInt(quantidade)
+            }
+        ]);
+    
+    if (error) {
+        console.error('Erro ao salvar:', error);
+        throw error;
+    }
+    
+    return data;
+}
+
 // Configuração do SweetAlert2 com tema de carnaval
 const Toast = Swal.mixin({
     toast: true,
@@ -241,49 +267,75 @@ document.addEventListener('DOMContentLoaded', function() {
             hideClass: {
                 popup: 'animate__animated animate__bounceOut'
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                // Explosão de confetes
-                confettiExplosion();
-                
-                // Sucesso!
+                // Mostra loading enquanto salva
                 Swal.fire({
-                    title: '🎊 CONFIRMADO! 🎊',
-                    html: `
-                        <div style="font-size: 3rem; margin: 20px 0;">
-                            🎭🎉💃🕺🎺
-                        </div>
-                        <p style="font-size: 1.2rem; color: #2ed573;">
-                            <strong>${nome}</strong>, sua presença está confirmada!
-                        </p>
-                        <p style="margin-top: 15px; color: #666;">
-                            Prepare sua fantasia e venha sambar no<br>
-                            <strong style="color: #54a0ff; font-size: 1.3rem;">Bloquinho do Edinaldo!</strong>
-                        </p>
-                        <div style="margin-top: 20px; font-size: 2rem;">
-                            🥁🎺🎵🎶🥳
-                        </div>
-                    `,
-                    confirmButtonText: '🎉 Partiu Carnaval!',
-                    confirmButtonColor: '#2ed573',
-                    showClass: {
-                        popup: 'animate__animated animate__tada'
-                    },
-                    allowOutsideClick: false
-                }).then(() => {
-                    // Toast de boas-vindas
-                    Toast.fire({
-                        icon: 'success',
-                        title: '🎭 Nos vemos no bloco!'
-                    });
-                    
-                    // Limpar formulário
-                    form.reset();
-                    document.getElementById('quantidade-group').style.display = 'none';
-                    
-                    // Mais confetes!
-                    setTimeout(confettiExplosion, 500);
+                    title: '🎭 Salvando...',
+                    html: '<div style="font-size: 2rem;">🎺🥁🎵</div>',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
                 });
+                
+                try {
+                    // Salva no Supabase
+                    await salvarConfirmacao(nome, whatsapp, acompanhante, quantidade);
+                    
+                    // Explosão de confetes
+                    confettiExplosion();
+                    
+                    // Sucesso!
+                    Swal.fire({
+                        title: '🎊 CONFIRMADO! 🎊',
+                        html: `
+                            <div style="font-size: 3rem; margin: 20px 0;">
+                                🎭🎉💃🕺🎺
+                            </div>
+                            <p style="font-size: 1.2rem; color: #2ed573;">
+                                <strong>${nome}</strong>, sua presença está confirmada!
+                            </p>
+                            <p style="margin-top: 15px; color: #666;">
+                                Prepare sua fantasia e venha sambar no<br>
+                                <strong style="color: #54a0ff; font-size: 1.3rem;">Bloquinho do Edinaldo!</strong>
+                            </p>
+                            <div style="margin-top: 20px; font-size: 2rem;">
+                                🥁🎺🎵🎶🥳
+                            </div>
+                        `,
+                        confirmButtonText: '🎉 Partiu Carnaval!',
+                        confirmButtonColor: '#2ed573',
+                        showClass: {
+                            popup: 'animate__animated animate__tada'
+                        },
+                        allowOutsideClick: false
+                    }).then(() => {
+                        // Toast de boas-vindas
+                        Toast.fire({
+                            icon: 'success',
+                            title: '🎭 Nos vemos no bloco!'
+                        });
+                        
+                        // Limpar formulário
+                        form.reset();
+                        document.getElementById('quantidade-group').style.display = 'none';
+                        
+                        // Mais confetes!
+                        setTimeout(confettiExplosion, 500);
+                    });
+                } catch (error) {
+                    // Erro ao salvar
+                    Swal.fire({
+                        icon: 'error',
+                        title: '😢 Ops!',
+                        text: 'Houve um erro ao confirmar. Tente novamente!',
+                        confirmButtonText: 'Tentar de novo',
+                        confirmButtonColor: '#2ed573'
+                    });
+                }
             }
         });
     });
